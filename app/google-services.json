@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "704213170143",
+    "firebase_url": "https://visitservice-ea116.firebaseio.com",
+    "project_id": "visitservice-ea116",
+    "storage_bucket": "visitservice-ea116.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704213170143:android:d2c8cba9d83f15d9",
+        "android_client_info": {
+          "package_name": "imdb.serial.com.visitservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704213170143-tu1uvavjlsahb2gvrh28vrtu3fcs50m2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqjBAdjlOhZxJUZL47PftWVCDT07raYtg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
