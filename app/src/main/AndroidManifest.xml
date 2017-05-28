@@ -3,6 +3,8 @@
     package="imdb.serial.com.visitservice">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -34,12 +36,24 @@
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".ContentActivity"
-            android:label="@string/title_activity_content" />
+            android:label="Select your place" />
         <activity android:name=".ForgotActivity"
-            android:theme="@style/generalnotitle">
+            >
 
+            <!-- to identify this activity as "searchable" -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
 
+           <!-- <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />-->
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDsAQXSSnRDTvCw6xiAGvt74oisMadUTPI"/>
+
     </application>
 
 </manifest>

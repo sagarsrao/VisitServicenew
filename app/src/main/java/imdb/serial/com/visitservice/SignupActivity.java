@@ -1,7 +1,10 @@
 package imdb.serial.com.visitservice;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -54,7 +57,7 @@ public class SignupActivity extends AppCompatActivity {
                 // Finish the registration screen and return to the Login activity
                 Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
                 startActivity(intent);
-                finish();
+               // finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
@@ -93,24 +96,31 @@ public class SignupActivity extends AppCompatActivity {
                 Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete: and Registration Success" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
 
                 progressDialog.setProgress(View.GONE);
+//check the connection
+                try {
+                    ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo activeNetworkInfo = connManager.getActiveNetworkInfo();
+                    if(activeNetworkInfo.isConnected())
+                        if (!task.isSuccessful()) {
 
-                if(!task.isSuccessful()){
+                            // Toast.makeText(SignupActivity.this,"create user with email Success"+FirebaseAuth.getInstance().getCurrentUser(),Toast.LENGTH_LONG);
 
-                   // Toast.makeText(SignupActivity.this,"create user with email Success"+FirebaseAuth.getInstance().getCurrentUser(),Toast.LENGTH_LONG);
+                            Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
+                                    Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
-                            Toast.LENGTH_SHORT).show();
+                            Log.d("Reason for failure", " " + task.getException());
+                            //startActivity(new Intent(SignupActivity.this,LoginActivity.class));
 
-                    Log.d("Reason for failure"," "+task.getException());
-                    //startActivity(new Intent(SignupActivity.this,LoginActivity.class));
-
-                }
-
-                else {
+                        } else {
 
 
-                    startActivity(new Intent(SignupActivity.this,LoginActivity.class));
+                            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
 
+                        }
+                else
+                    Toast.makeText(getApplicationContext(),"Network failure",Toast.LENGTH_LONG).show();
+                }catch (Exception e){
+                    Log.e("Error",""+e.getMessage());
                 }
             }
         });
@@ -131,7 +141,7 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
-        finish();
+      //  finish();
     }
 
     public void onSignupFailed() {
@@ -168,4 +178,7 @@ public class SignupActivity extends AppCompatActivity {
 
         return valid;
     }
+
+
+
 }

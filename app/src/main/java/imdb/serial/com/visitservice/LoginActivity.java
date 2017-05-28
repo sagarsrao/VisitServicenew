@@ -1,7 +1,10 @@
 package imdb.serial.com.visitservice;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +62,7 @@ public class    LoginActivity extends AppCompatActivity {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
+              //  finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
@@ -88,46 +91,67 @@ public class    LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+            final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+                    R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Authenticating...");
+            progressDialog.show();
 
-        // TODO: Implement your own authentication logic here.
+            String email = _emailText.getText().toString();
+            String password = _passwordText.getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                if(!task.isSuccessful()){
-
-                    Toast.makeText(getApplicationContext(),"Login failed",Toast.LENGTH_LONG).show();
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Login Success",Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LoginActivity.this,ContentActivity.class));
-
-                }
-            }
-        });
+            // TODO: Implement your own authentication logic here.
+            //check the internet connection
 
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
+        try {
+
+
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connManager.getActiveNetworkInfo();
+
+
+            if (activeNetworkInfo.isConnected()) {
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (!task.isSuccessful()) {
+
+                            Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(LoginActivity.this, ContentActivity.class));
+
+                        }
                     }
-                }, 3000);
-    }
+                });
+            }
+                else {
+                Toast.makeText(getApplicationContext(), "Network not available", Toast.LENGTH_LONG).show();
+            }
+        }catch(Exception e ){
+            Log.d("catching the Error:",""+e.getMessage());
+            Toast.makeText(getApplicationContext(), "Network not available", Toast.LENGTH_LONG).show();
 
+        }
+
+
+        try {
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            // On complete call either onLoginSuccess or onLoginFailed
+                            onLoginSuccess();
+                            // onLoginFailed();
+                            progressDialog.dismiss();
+                        }
+                    }, 3000);
+        }catch(Exception e){
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -136,7 +160,7 @@ public class    LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-                this.finish();
+             //   this.finish();
             }
         }
     }
@@ -149,7 +173,7 @@ public class    LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        finish();
+      //  finish();
     }
 
     public void onLoginFailed() {
@@ -180,4 +204,9 @@ public class    LoginActivity extends AppCompatActivity {
 
         return valid;
     }
+
+
+
+
+
 }
